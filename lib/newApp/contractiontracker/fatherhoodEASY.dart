@@ -52,11 +52,20 @@ class _FatherHoodState extends State<FatherHood> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
+        decoration:  BoxDecoration(
+
+          gradient: LinearGradient(begin: Alignment.bottomRight, stops: const [
+            0.8,
+            0.8
+          ], colors: [
+            Colors.black.withOpacity(.8),
+            Colors.black.withOpacity(.8)
+          ]),
+          image: const DecorationImage(
             image: AssetImage("assets/images/gb.png"),
             fit: BoxFit.cover,
           ),
+
         ),
         child: Column(
           children: [
@@ -70,13 +79,13 @@ class _FatherHoodState extends State<FatherHood> {
         width: double.infinity,
         height: 400,
         decoration: BoxDecoration(
-          gradient: LinearGradient(begin: Alignment.bottomRight, stops: const [
-            0.0,
-            0.9
-          ], colors: [
-            Colors.black.withOpacity(.8),
-            Colors.black.withOpacity(.0)
-          ]),
+          // gradient: LinearGradient(begin: Alignment.bottomRight, stops: const [
+          //   0.0,
+          //   0.9
+          // ], colors: [
+          //   Colors.black.withOpacity(.8),
+          //   Colors.black.withOpacity(.0)
+          // ]),
 
         ),
         child: SingleChildScrollView(
@@ -114,7 +123,7 @@ class _FatherHoodState extends State<FatherHood> {
                     ),
                   ),
                 ),
-                Text("Activity",style: GoogleFonts.lato(fontSize: 15,fontWeight: FontWeight.w700,color: AppColors.textColor),
+                Text("ACTIVITY",style: GoogleFonts.lato(fontSize: 15,fontWeight: FontWeight.w700,color: AppColors.textColor),
 
 
                 ),
@@ -168,7 +177,7 @@ class _FatherHoodState extends State<FatherHood> {
                     ),
                   ),
                 ),
-                Text("You",style: GoogleFonts.lato(fontSize: 15,fontWeight: FontWeight.w700,color: AppColors.textColor),
+                Text("YOU",style: GoogleFonts.lato(fontSize: 15,fontWeight: FontWeight.w700,color: AppColors.textColor),
 
 
                 ),

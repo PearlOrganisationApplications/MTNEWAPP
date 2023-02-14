@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../Constant/App Color/constant.dart';
 import '../contractiontracker/Discord.dart';
+import '../contractiontracker/easy/tebleFromDataScreen.dart';
 import 'homeNew.dart';
 
 
@@ -24,7 +25,14 @@ class _LinkScreenState extends State<LinkScreen> {
         child: Container(
           width: double.infinity,
           height: double.infinity,
-          decoration: const BoxDecoration(
+          decoration:  BoxDecoration(
+            gradient: LinearGradient(begin: Alignment.bottomRight, stops: const [
+              0.0,
+              0.9
+            ], colors: [
+              Colors.white.withOpacity(.8),
+              Colors.black.withOpacity(.5)
+            ]),
             image: DecorationImage(
               image: AssetImage("assets/images/gb.png"),
               fit: BoxFit.cover,
@@ -43,13 +51,13 @@ class _LinkScreenState extends State<LinkScreen> {
                 width: double.infinity,
                 height: 468,
                 decoration: BoxDecoration(
-                    gradient: LinearGradient(begin: Alignment.bottomRight, stops: [
-                      0.0,
-                      0.9
-                    ], colors: [
-                      Colors.black.withOpacity(.8),
-                      Colors.black.withOpacity(.0)
-                    ]),
+                    // gradient: LinearGradient(begin: Alignment.bottomRight, stops: [
+                    //   0.0,
+                    //   0.0
+                    // ], colors: [
+                    //   Colors.black.withOpacity(.0),
+                    //   Colors.black.withOpacity(.0)
+                    // ]),
 
                 ),
 
@@ -84,12 +92,12 @@ class _LinkScreenState extends State<LinkScreen> {
                             children: [
                               Row(
                                 children: [
-                                  Icon(Icons.alarm,color: AppColors.textColor,),
+                                  Icon(Icons.alarm,   color: AppColors.white,),
                                   const SizedBox(width: 20,),
-                                  Text("Contraction tracker",style: GoogleFonts.lato(fontWeight: FontWeight.w700,fontSize: 15,color: AppColors.textColor),)
+                                  Text("     Contraction Tracker",style: GoogleFonts.lato(fontWeight: FontWeight.w700,fontSize: 15,color: AppColors.white),)
                                 ],
                               ),
-                              Icon(Icons.arrow_forward_ios,color: AppColors.textColor,)
+                              Icon(Icons.arrow_forward_ios,color: AppColors.white,)
                             ],
                           ),
                         ),
@@ -97,29 +105,38 @@ class _LinkScreenState extends State<LinkScreen> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        width: double.infinity,
-                        height: 56,
-                        decoration: BoxDecoration(
-                          color: Colors.black
-                            ,borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                              color: AppColors.buttonColor,
-                              width: 1.0,
-                              style: BorderStyle.solid),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Row(
-                              children: [
-                                 Image.asset("assets/images/easyb.png"),
-                                const SizedBox(width: 20,),
-                                Text("EASY                             ",style: GoogleFonts.lato(fontWeight: FontWeight.w700,fontSize: 15,color: AppColors.buttonColor),)
-                              ],
-                            ),
-                            Icon(Icons.arrow_forward_ios,color: AppColors.buttonColor,)
-                          ],
+                      InkWell(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>   const TableDataFrom()),
+                          );
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 56,
+                          decoration: BoxDecoration(
+                            color: Colors.black
+                              ,borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                                color: AppColors.buttonColor,
+                                width: 1.0,
+                                style: BorderStyle.solid),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Row(
+                                children: [
+                                   Image.asset("assets/images/dary.png"),
+                                  const SizedBox(width: 20,),
+                                  Text(" EASY                             ",style: GoogleFonts.lato(fontWeight: FontWeight.w700,fontSize: 15,color: AppColors.white),)
+                                ],
+                              ),
+                              Icon(Icons.arrow_forward_ios,color: AppColors.white,)
+                            ],
+                          ),
                         ),
                       ),
                       const SizedBox(
@@ -152,10 +169,10 @@ class _LinkScreenState extends State<LinkScreen> {
                                 children: [
                                   Image.asset("assets/images/imagea.png"),
                                   const SizedBox(width: 23,),
-                                  Text("Join our Discord ",style: GoogleFonts.lato(fontWeight: FontWeight.w700,fontSize: 15,color: const Color(0xff5865F2)),)
+                                  Text("Join our Discord ",style: GoogleFonts.lato(fontWeight: FontWeight.w700,fontSize: 15,    color: AppColors.white,)),
                                 ],
                               ),
-                              const Icon(Icons.arrow_forward_ios,color:Color(0xff5865F2) ,)
+                               Icon(Icons.arrow_forward_ios,   color: AppColors.white, )
                             ],
                           ),
                         ),

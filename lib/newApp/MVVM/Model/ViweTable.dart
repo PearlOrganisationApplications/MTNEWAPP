@@ -11,13 +11,13 @@ class ViweTeble {
     if (json['task'] != null) {
       task = <Task>[];
       json['task'].forEach((v) {
-        task!.add(Task.fromJson(v));
+        task!.add(new Task.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  Map<String, dynamic>();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['message'] = this.message;
     data['status'] = this.status;
     if (this.task != null) {
@@ -62,7 +62,7 @@ class Task {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['user_id'] = this.userId;
     data['eat'] = this.eat;

@@ -103,8 +103,15 @@ class _HomeNewState extends State<HomeNew> {
         child: Container(
           width: double.infinity,
           height: double.infinity,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
+          decoration:  BoxDecoration(
+            gradient: LinearGradient(begin: Alignment.bottomRight, stops: const [
+              0.0,
+              0.0
+            ], colors: [
+              Colors.white.withOpacity(.8),
+              Colors.black.withOpacity(.5)
+            ]),
+            image: const DecorationImage(
               image: AssetImage("assets/images/gb.png"),
               fit: BoxFit.cover,
             ),
@@ -146,7 +153,7 @@ class _HomeNewState extends State<HomeNew> {
             height: 347,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30),
-                  color: Color(0xff1E1E1E)
+                  color: const Color(0xff1E1E1E)
             ),
             child: ListView.builder(
                 itemCount: laps.length,
@@ -224,7 +231,7 @@ class _HomeNewState extends State<HomeNew> {
                   );
                 }),
           ),
-          SizedBox(
+          const SizedBox(
             height: 45,),
           Padding(
             padding: const EdgeInsets.only(left: 25,right: 4),
@@ -258,7 +265,7 @@ class _HomeNewState extends State<HomeNew> {
               ],
             ),
           ),
-          SizedBox(height: 10,),
+          const SizedBox(height: 10,),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

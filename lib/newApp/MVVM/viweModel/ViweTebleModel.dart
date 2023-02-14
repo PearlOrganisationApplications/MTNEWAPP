@@ -12,7 +12,7 @@ class ApiServicesApp{
   // }
 
 
-  Future <ViweTeble> apiCallTaskLogin() async{
+ static Future <ViweTeble> apiCallTaskLogin() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var url = Uri.parse('https://test.pearl-developer.com/mt/public/api/getTask');
     Map dataa = {
@@ -27,9 +27,9 @@ print("${dataa}");
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
 
-    final Map<String,dynamic> data = jsonDecode(response.body);
+    return ViweTeble.fromJson(jsonDecode(response.body));
 
-    return ViweTeble(token: data["token"], );
+
   }
 }
 

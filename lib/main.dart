@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:sizer/sizer.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,14 @@ void main() async {
   initScreen = prefs.getInt("initScreen");
   await prefs.setInt("initScreen", 1);
   print('initScreen $initScreen');
+  // Step 2
+  WidgetsFlutterBinding.ensureInitialized();
+  // Step 3
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((value) => runApp(MyApp()));
+
   runApp(
     MultiProvider(
       providers: [
@@ -34,24 +43,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeNotifier>(
-      builder: (context, notifier, _) {
-        return Sizer(
-          builder: (context, orientation, deviceType) {
-            return MaterialApp(
-              theme: notifier.darkTheme ? darkTheme : lightTheme,
-              debugShowCheckedModeBanner: false,
-              initialRoute:
-                  initScreen == 0 || initScreen == null ? "first" : "/",
-              routes: {
-                '/': (context) =>   BottomBar(token: '',),
-                'first': (context) => const NameScrreen(),
-                // 'childinfo': (context) => const HomeScreen(),
-                // 'cycleduration': (context) => const CycleDuration(),
-                // 'calculateduration': (context) => const CalculateDuration(),
-                // 'duescreen': (context) => const DueDateScreen()
-              },
-            );
+    return Sizer(
+      builder: (context, orientation, deviceType) {
+        return MaterialApp(
+
+          debugShowCheckedModeBanner: false,
+          initialRoute:
+              initScreen == 0 || initScreen == null ? "first" : "/",
+          routes: {
+            '/': (context) =>   const BottomBar(token: '',),
+            'first': (context) => const NameScrreen(),
+
           },
         );
       },
