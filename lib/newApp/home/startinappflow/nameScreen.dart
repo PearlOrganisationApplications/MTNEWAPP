@@ -31,7 +31,7 @@ class _NameScrreenState extends State<NameScrreen> {
         height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/gb.png"),
+            image: AssetImage("assets/images/bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),

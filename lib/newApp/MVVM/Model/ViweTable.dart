@@ -40,14 +40,14 @@ class Task {
 
   Task(
       {this.id,
-        this.userId,
-        this.eat,
-        this.activity,
-        this.sleep,
-        this.you,
-        this.createdAt,
-        this.updatedAt,
-        this.day});
+      this.userId,
+      this.eat,
+      this.activity,
+      this.sleep,
+      this.you,
+      this.createdAt,
+      this.updatedAt,
+      this.day});
 
   Task.fromJson(Map<String, dynamic> json) {
     id = json['id'];

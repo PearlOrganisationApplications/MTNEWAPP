@@ -60,7 +60,7 @@ class _NameScreenState extends State<NameScreen> {
         height: double.infinity,
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("assets/images/gb.png"),
+            image: AssetImage("assets/images/bg.jpg"),
             fit: BoxFit.cover,
           ),
         ),
@@ -106,7 +106,7 @@ class _NameScreenState extends State<NameScreen> {
                       child: TextFormField(
                         controller: textEditingController,
                         decoration:const InputDecoration(
-                          hintText:"Type your age here",
+                          hintText:"Type your baby name",
                           border:InputBorder.none,
                           fillColor:Colors.white,
                         ),
@@ -150,9 +150,12 @@ class _NameScreenState extends State<NameScreen> {
                           Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) =>  BottomBar(token: '',),
+                            builder: (context) =>    BottomBar(token: '', name: widget.name, babyname: textEditingController.text, age:_dateTime.toString() , ),
                           ),
                         );
+                          print(widget.name);
+                          print(textEditingController.text);
+                          print(_dateTime);
                       },
                       child: Container(
                         width: 200,

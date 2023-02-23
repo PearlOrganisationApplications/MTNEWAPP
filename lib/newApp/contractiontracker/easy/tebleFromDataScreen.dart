@@ -14,15 +14,18 @@ class TableDataFrom extends StatefulWidget {
 }
 
 class _TableDataFromState extends State<TableDataFrom> {
+  String? data;
   @override
-  // void initState() {
-  //   ApiServicesApp.apiCallTaskLogin();
-  //
-  //   super.initState();
-  // }
+  void initState() {
+    ApiServicesApp.apiCallTaskLogin();
+
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
+
 
 
     return Scaffold(
@@ -35,7 +38,7 @@ class _TableDataFromState extends State<TableDataFrom> {
           height: double.infinity,
           decoration: const BoxDecoration(
             image: DecorationImage(
-              image: AssetImage("assets/images/gb.png"),
+              image: AssetImage("assets/images/bg.jpg"),
               fit: BoxFit.cover,
             ),
           ),
@@ -59,8 +62,8 @@ class _TableDataFromState extends State<TableDataFrom> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return  const Center(
-                        child: CircularProgressIndicator(),
+                      return   Center(
+                        child:  CircularProgressIndicator(color: AppColors.buttonColor,) ,
                       );
                     } else {
                       return ListView.builder(
@@ -79,7 +82,7 @@ class _TableDataFromState extends State<TableDataFrom> {
                                     style: GoogleFonts.lato(
                                         fontSize: 24,
                                         fontWeight: FontWeight.w700,
-                                        color: AppColors.textColor),
+                                        color: AppColors.white),
                                   ),
                                   const SizedBox(
                                     height: 20,
@@ -96,8 +99,8 @@ class _TableDataFromState extends State<TableDataFrom> {
                                             0.0
                                           ],
                                           colors: [
-                                            Colors.white.withOpacity(.1),
-                                            Colors.white.withOpacity(.1)
+                                            Colors.black.withOpacity(.3),
+                                            Colors.black.withOpacity(.3)
                                           ]),
                                     ),
                                     child: Padding(
@@ -136,7 +139,7 @@ class _TableDataFromState extends State<TableDataFrom> {
                                           ),
                                           Row(
                                             children: [
-                                              Text("Activity",
+                                              Text("ACTIVITY",
                                                   style: GoogleFonts.lato(
                                                       fontSize: 24,
                                                       fontWeight:

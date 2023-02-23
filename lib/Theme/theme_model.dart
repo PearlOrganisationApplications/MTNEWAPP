@@ -6,6 +6,7 @@ import '../Constant/App Keys/app_key.dart';
 
 class ThemeNotifier extends ChangeNotifier {
   bool _darktheme = false;
+
   bool get darkTheme => _darktheme;
 
   ThemeNotifier() {

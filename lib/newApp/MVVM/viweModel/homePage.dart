@@ -1,17 +1,16 @@
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
-import '../Model/ViweTable.dart';
-import '../Model/table.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
-class ApiServicesApp {
+import '../Model/class_Name.dart';
+class ApiServicesAppp {
 
 
-  static Future<ViweTeble> apiCallTaskLogin() async {
+  static Future<NameModel> apiCallUserLogin() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var url =
-        Uri.parse('https://test.pearl-developer.com/mt/public/api/getTask');
+    Uri.parse('https://test.pearl-developer.com/mt/public/api/getUser');
     Map dataa = {
       'token': prefs.getString('token'),
     };
@@ -23,6 +22,6 @@ class ApiServicesApp {
     print('Response status: ${response.statusCode}');
     print('Response body: ${response.body}');
 
-    return ViweTeble.fromJson(jsonDecode(response.body));
+    return NameModel.fromJson(jsonDecode(response.body));
   }
 }

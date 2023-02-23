@@ -1,13 +1,15 @@
 import 'dart:async';
 
+import 'package:Mantenatal/newApp/home/startinappflow/showScrreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sizer/sizer.dart';
 
 import '../../Constant/App Color/constant.dart';
 import '../widget/app_button.dart';
-
+import '../widget/bottomsheet.dart';
 
 class HomeNew extends StatefulWidget {
   const HomeNew({Key? key}) : super(key: key);
@@ -27,6 +29,8 @@ class _HomeNewState extends State<HomeNew> {
   Timer? timer;
   bool started = false;
   DateTime? startTime, endTime;
+
+  int startIndex =0;
 
   List laps = [];
 
@@ -66,9 +70,16 @@ class _HomeNewState extends State<HomeNew> {
 
   void startTimer() {
     started = true;
+
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       int localSecond = second + 1;
       int localMintues = minutes;
+      if (localSecond == 15) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const ShowScreen()),
+        );
+      }
 
       if (localSecond > 59) {
         localMintues++;
@@ -82,53 +93,72 @@ class _HomeNewState extends State<HomeNew> {
       });
     });
   }
+
   TimeOfDay? avgTime() {
-    if (startTime  != null && endTime != null) {
+    if (startTime != null && endTime != null) {
       final difference = endTime!.difference(startTime!).inMinutes;
 
       final result = startTime!.add(Duration(minutes: difference ~/ 2));
       return TimeOfDay.fromDateTime(result);
     }
   }
+
+  // void autoPress(){
+  //   timer = Timer( Duration(seconds:15),(){
+  //     Timer.periodic( Duration(seconds: 15), (Timer t) => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>ShowScreen()),),);
+  //    print("This line will print after two seconds");
+  //   });
+  // }
   bool slight = false;
   bool mild = false;
   bool strong = false;
-
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: Colors.transparent,
       body: SafeArea(
         child: Container(
           width: double.infinity,
           height: double.infinity,
-          decoration:  BoxDecoration(
-            gradient: LinearGradient(begin: Alignment.bottomRight, stops: const [
-              0.0,
-              0.0
-            ], colors: [
-              Colors.white.withOpacity(.8),
-              Colors.black.withOpacity(.5)
-            ]),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.bottomRight,
+                stops: const [
+                  0.0,
+                  0.0
+                ],
+                colors: [
+                  Colors.white.withOpacity(.8),
+                  Colors.black.withOpacity(.5)
+                ]),
             image: const DecorationImage(
-              image: AssetImage("assets/images/gb.png"),
+              image: AssetImage("assets/images/bg.jpg"),
               fit: BoxFit.cover,
             ),
           ),
           child: SingleChildScrollView(
             child: Column(
               // crossAxisAlignment: CrossAxisAlignment.center,
-             // mainAxisAlignment: MainAxisAlignment.center,
+              // mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 10 ,),
-                Center(child: Image.asset("assets/images/logob.png"),),
-                const SizedBox(height: 10 ,),
+                const SizedBox(
+                  height: 10,
+                ),
+                Center(
+                  child: Image.asset("assets/images/logob.png"),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children:   [
-                   Text("$digitMin:$digitSecond",style: GoogleFonts.lato(fontSize: 20,color: Colors.white)),
-
+                  children: [
+                    Text("$digitMin:$digitSecond",
+                        style: GoogleFonts.lato(
+                            fontSize: 20, color: Colors.white)),
                   ],
                 ),
                 timeConterner()
@@ -139,22 +169,21 @@ class _HomeNewState extends State<HomeNew> {
       ),
     );
   }
-  Widget timeConterner(){
-    int selectedIndex=0;
-    int gottenStars=4;
 
+  Widget timeConterner() {
+    int selectedIndex = 0;
+    int gottenStars = 4;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
           Container(
-              width: double.infinity,
+            width: double.infinity,
             height: 347,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30),
-                  color: const Color(0xff1E1E1E)
-            ),
+                borderRadius: BorderRadius.circular(30),
+                color: const Color(0xff1E1E1E)),
             child: ListView.builder(
                 itemCount: laps.length,
                 itemBuilder: (context, index) {
@@ -165,64 +194,69 @@ class _HomeNewState extends State<HomeNew> {
                       height: 9.25.h,
                       child: Dismissible(
                         key: Key(laps[index]),
-                        onDismissed: (direction){
+                        onDismissed: (direction) async {
                           setState(() {
+                            index = laps[index];
+
                             laps.removeAt(index);
                           });
+                          SharedPreferences pref =
+                              await SharedPreferences.getInstance();
+                          pref.setInt('index', laps[index]);
                         },
-
                         child: Card(
                           semanticContainer: false,
-                            color: Colors.white,
-
+                          color: Colors.white,
                           elevation: 7,
                           child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: Text("Contraction intensity:${index + 1}",
+                                child: Text("Contraction :#${index + 1}",
                                     style: TextStyle(
-                                        fontSize:15.sp,
+                                        fontSize: 15.sp,
                                         color: index.isOdd
                                             ? Colors.black
-                                            :  Colors.black)),
+                                            : Colors.black)),
                               ),
                               Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: slight? Column(
-                                    children: [
-                                      Text(
-                                        "${laps[index]}",
-                                        style: TextStyle(
-                                            color: index.isOdd
-                                                ? Colors.black
-                                                : Colors.black),
-                                      ),
-                                      const Icon(Icons.star,color: Colors.white,),
-                                    ],
-                                  ): mild ? Column(
-                                    children: [
-                                      Text(
-                                        "${laps[index]}",
-                                        style: TextStyle(
-                                            color: index.isOdd
-                                                ? Colors.black
-                                                : Colors.black),
-                                      ),
-
-                                    ],
-                                  ):
-                                  Text(
-                                    "${laps[index]}",
-                                    style: TextStyle(
-                                        color: index.isOdd
-                                            ? Colors.black
-                                            : Colors.black),
-                                  )
-
-                              ),
+                                  child: slight
+                                      ? Column(
+                                          children: [
+                                            Text(
+                                              "${laps[index]}",
+                                              style: TextStyle(
+                                                  color: index.isOdd
+                                                      ? Colors.black
+                                                      : Colors.black),
+                                            ),
+                                            const Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
+                                            ),
+                                          ],
+                                        )
+                                      : mild
+                                          ? Column(
+                                              children: [
+                                                Text(
+                                                  "${laps[index]}",
+                                                  style: TextStyle(
+                                                      color: index.isOdd
+                                                          ? Colors.black
+                                                          : Colors.black),
+                                                ),
+                                              ],
+                                            )
+                                          : Text(
+                                              "${laps[index]}",
+                                              style: TextStyle(
+                                                  color: index.isOdd
+                                                      ? Colors.black
+                                                      : Colors.black),
+                                            )),
                             ],
                           ),
                         ),
@@ -232,85 +266,134 @@ class _HomeNewState extends State<HomeNew> {
                 }),
           ),
           const SizedBox(
-            height: 45,),
-          Padding(
-            padding: const EdgeInsets.only(left: 25,right: 4),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                 // Wrap(
-                 //   children:  List.generate(5, (index){
-                 //     return InkWell(
-                 //
-                 //       onTap: (){
-                 //         setState(() {
-                 //           selectedIndex =index;
-                 //           print("${index}");
-                 //
-                 //         });
-                 //       },
-                 //       child: Container(
-                 //         margin: const EdgeInsets.only(right: 10),
-                 //         child: AppButton(
-                 //           color: selectedIndex ==index?Colors.black:Colors.blue,
-                 //           size:50 ,
-                 //
-                 //           backgroundColor:selectedIndex ==index?Colors.pinkAccent:Colors.white ,
-                 //           borderColor:selectedIndex ==index?Colors.black:AppColors.buttonColor,
-                 //           text: (index+1).toString(),),
-                 //       ),
-                 //     );
-                 //   })
-                 // )
-              ],
-            ),
+            height: 50,
           ),
-          const SizedBox(height: 10,),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              (!started) ?  InkWell(
-                onTap: (){
-                  (!started) ? startTimer() : stopTimer();
-
-                },
-                child: Container(
-                  width: 300,
-                  height: 38,
-                  decoration: BoxDecoration(
-                    color: AppColors.buttonColor
-                        ,borderRadius: BorderRadius.circular(12)
-                  ),
-                  child: Center(child: Text("Start Tracker",style: GoogleFonts.lato(fontSize: 15,fontWeight: FontWeight.w700,color: Colors.black),)),
-                ),
-              ):InkWell(
-                onTap: (){
-                  addLaps();
-                  Reset();
-                },
-                child: Container(
-            width: 300,
-            height: 38,
-            decoration: BoxDecoration(
-                  color: AppColors.textColor
-                  ,borderRadius: BorderRadius.circular(12)
-            ),
-            child: Center(child: Text("Interval",style: GoogleFonts.lato(fontSize: 15,fontWeight: FontWeight.w700,color: AppColors.buttonColor),)),
-          ),
-              ),
-              // Container(
-              //   width: 155,
-              //   height: 38,
-              //   decoration: BoxDecoration(
-              //       color: AppColors.textColor
-              //       ,borderRadius: BorderRadius.circular(12)
-              //   ),
-              //   child: Center(child: Text("Stop Tracker",style: GoogleFonts.lato(fontWeight: FontWeight.w700,color: AppColors.buttonColor),)),
-              // )
+              (!started)
+                  ? InkWell(
+                      onTap: () {
+                        (!started) ? startTimer() : stopTimer();
+                      },
+                      child: Container(
+                        width: 300,
+                        height: 38,
+                        decoration: BoxDecoration(
+                            color: AppColors.buttonColor,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Center(
+                            child: Text(
+                          "Start Tracker",
+                          style: GoogleFonts.lato(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black),
+                        )),
+                      ),
+                    )
+                  : InkWell(
+                      onTap: () {
+                        addLaps();
+                        Reset();
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (context) => buildSheet());
+                      },
+                      child: Container(
+                        width: 300,
+                        height: 38,
+                        decoration: BoxDecoration(
+                            color: AppColors.textColor,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Center(
+                            child: Text(
+                          "Interval",
+                          style: GoogleFonts.lato(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                              color: AppColors.buttonColor),
+                        )),
+                      ),
+                    ),
             ],
           )
         ],
       ),
     );
+  }
+
+  Widget buildSheet() {
+    return DraggableScrollableSheet(builder: (_, controller) {
+      return Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+        ),
+        child: ListView(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          controller: controller,
+          children: [
+            const SizedBox(
+              height: 30,
+            ),
+            const Center(
+                child: Text(
+              "Select Intensity",
+              style: TextStyle(fontSize: 20),
+            )),
+            const SizedBox(
+              height: 40,
+            ),
+            TextButton(
+                onPressed: () {
+
+                },
+                child: const Text(
+                  "Slight",
+                  style: TextStyle(fontSize: 20),
+                )),
+            const SizedBox(
+              height: 10,
+            ),
+            TextButton(
+                onPressed: () {},
+                child: const Text(
+                  "Mild",
+                  style: TextStyle(fontSize: 20),
+                )),
+            const SizedBox(
+              height: 10,
+            ),
+            TextButton(
+                onPressed: () {},
+                child: const Text(
+                  "Moderate",
+                  style: TextStyle(fontSize: 20),
+                )),
+            const SizedBox(
+              height: 10,
+            ),
+            TextButton(
+                onPressed: () {},
+                child: const Text(
+                  "Strong",
+                  style: TextStyle(fontSize: 20),
+                )),
+            const SizedBox(
+              height: 10,
+            ),
+            TextButton(
+                onPressed: () {
+
+                },
+                child: const Text(
+                  "Intense",
+                  style: TextStyle(fontSize: 20),
+                )),
+          ],
+        ),
+      );
+    });
   }
 }
