@@ -12,10 +12,9 @@ import 'newApp/home/startinappflow/nameScreen.dart';
 int? initScreen;
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   Clipboard.setData(ClipboardData());
   HapticFeedback.heavyImpact();
-  WidgetsFlutterBinding.ensureInitialized();
-
 
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -23,12 +22,13 @@ void main() async {
   await prefs.setInt("initScreen", 1);
   print('initScreen $initScreen');
   // Step 2
+
   WidgetsFlutterBinding.ensureInitialized();
   // Step 3
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
-  ]).then((value) => runApp(const MyApp()));
+  ]).then((_) => runApp(const MyApp()));
 
   runApp(
     MultiProvider(
@@ -54,7 +54,10 @@ class MyApp extends StatelessWidget {
           initialRoute: initScreen == 0 || initScreen == null ? "first" : "/",
           routes: {
             '/': (context) => const BottomBar(
-                  token: '', name: '', babyname: '', age: '',
+                  token: '',
+                  name: '',
+                  babyname: '',
+                  age: '',
                 ),
             'first': (context) => const NameScrreen(),
           },

@@ -53,6 +53,7 @@ dependencies:
   webview_flutter: any
   http: ^0.13.5
   vibration:
+  smooth_star_rating: ^1.1.1
 
 
 

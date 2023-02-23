@@ -4,15 +4,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../Model/class_Name.dart';
+
 class ApiServicesAppp {
-
-
   static Future<NameModel> apiCallUserLogin() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var url =
-    Uri.parse('https://test.pearl-developer.com/mt/public/api/getUser');
+        Uri.parse('https://test.pearl-developer.com/mt/public/api/getUser');
     Map dataa = {
-      'token': prefs.getString('token'),
+      'token': prefs.getString('token') ?? '',
     };
     print("${dataa}");
     var response = await http.post(url, body: dataa);

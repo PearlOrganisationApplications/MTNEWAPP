@@ -22,12 +22,8 @@ class _TableDataFromState extends State<TableDataFrom> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-
-
     return Scaffold(
       // appBar: AppBar(
       //   backgroundColor: AppColors.buttonColor,
@@ -46,31 +42,33 @@ class _TableDataFromState extends State<TableDataFrom> {
             width: double.infinity,
             height: double.infinity,
             decoration: const BoxDecoration(
-              // gradient: LinearGradient(
-              //     begin: Alignment.bottomRight,
-              //     stops: const [
-              //       0.0,
-              //       0.9
-              //     ],
-              //     colors: [
-              //       Colors.black.withOpacity(.8),
-              //       Colors.black.withOpacity(.5)
-              //     ]),
-            ),
+                // gradient: LinearGradient(
+                //     begin: Alignment.bottomRight,
+                //     stops: const [
+                //       0.0,
+                //       0.9
+                //     ],
+                //     colors: [
+                //       Colors.black.withOpacity(.8),
+                //       Colors.black.withOpacity(.5)
+                //     ]),
+                ),
             child: FutureBuilder<ViweTeble>(
                 future: ApiServicesApp.apiCallTaskLogin(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return   Center(
-                        child:  CircularProgressIndicator(color: AppColors.buttonColor,) ,
+                      return Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.buttonColor,
+                        ),
                       );
                     } else {
                       return ListView.builder(
                           shrinkWrap: true,
-                          itemCount: snapshot.data!.task!.length??0,
+                          itemCount: snapshot.data!.task!.length,
                           itemBuilder: (BuildContext context, int index) {
-                            int itemCount = snapshot?.data!.task!.length ?? 0;
+                            int itemCount = snapshot.data!.task!.length;
                             int reversedIndex = itemCount - 1 - index;
                             return Padding(
                               padding: const EdgeInsets.only(
@@ -78,7 +76,8 @@ class _TableDataFromState extends State<TableDataFrom> {
                               child: Column(
                                 children: [
                                   Text(
-                                    snapshot.data!.task![reversedIndex].day.toString(),
+                                    snapshot.data!.task![reversedIndex].day
+                                        .toString(),
                                     style: GoogleFonts.lato(
                                         fontSize: 24,
                                         fontWeight: FontWeight.w700,
@@ -122,7 +121,10 @@ class _TableDataFromState extends State<TableDataFrom> {
                                               const SizedBox(
                                                 width: 52,
                                               ),
-                                              Text(snapshot.data!.task![reversedIndex].eat.toString(),
+                                              Text(
+                                                  snapshot.data!
+                                                      .task![reversedIndex].eat
+                                                      .toString(),
                                                   style: GoogleFonts.lato(
                                                       fontSize: 24,
                                                       fontWeight:
@@ -149,7 +151,12 @@ class _TableDataFromState extends State<TableDataFrom> {
                                               const SizedBox(
                                                 width: 52,
                                               ),
-                                              Text(snapshot.data!.task![reversedIndex].activity.toString(),
+                                              Text(
+                                                  snapshot
+                                                      .data!
+                                                      .task![reversedIndex]
+                                                      .activity
+                                                      .toString(),
                                                   style: GoogleFonts.lato(
                                                       fontSize: 24,
                                                       fontWeight:
@@ -176,7 +183,12 @@ class _TableDataFromState extends State<TableDataFrom> {
                                               const SizedBox(
                                                 width: 52,
                                               ),
-                                              Text(snapshot.data!.task![reversedIndex].sleep.toString(),
+                                              Text(
+                                                  snapshot
+                                                      .data!
+                                                      .task![reversedIndex]
+                                                      .sleep
+                                                      .toString(),
                                                   style: GoogleFonts.lato(
                                                       fontSize: 24,
                                                       fontWeight:
@@ -203,7 +215,10 @@ class _TableDataFromState extends State<TableDataFrom> {
                                               const SizedBox(
                                                 width: 52,
                                               ),
-                                              Text(snapshot.data!.task![reversedIndex].you.toString(),
+                                              Text(
+                                                  snapshot.data!
+                                                      .task![reversedIndex].you
+                                                      .toString(),
                                                   style: GoogleFonts.lato(
                                                       fontSize: 24,
                                                       fontWeight:
