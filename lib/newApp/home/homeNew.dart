@@ -4,8 +4,9 @@ import 'package:Mantenatal/newApp/home/startinappflow/showScrreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:vibration/vibration.dart';
 import 'package:sizer/sizer.dart';
+import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 import '../../Constant/App Color/constant.dart';
 import '../widget/app_button.dart';
@@ -22,15 +23,23 @@ class _HomeNewState extends State<HomeNew> {
   var odd;
 
   ///***  Create a business Logic For Timer.
-
+  int? indx = 0;
   int second = 0, minutes = 0;
+  int? count = 0;
 
   String digitSecond = "00", digitMin = "00";
   Timer? timer;
   bool started = false;
+  bool isloading = false;
   DateTime? startTime, endTime;
 
-  int startIndex =0;
+  bool slight = false;
+  bool mild = false;
+  bool moderate = false;
+  bool strong = false;
+  bool intense = false;
+
+  int startIndex = 0;
 
   List laps = [];
 
@@ -59,8 +68,12 @@ class _HomeNewState extends State<HomeNew> {
 
   //*** Now We Going To Create Function For Laps
 
-  void addLaps() {
-    String lap = "$digitMin:$digitSecond";
+  void addLaps() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var min = preferences.getString('digitMin');
+    var sec = preferences.getString('digitSecond');
+
+    String lap = "$min:$sec";
     setState(() {
       laps.add(lap);
     });
@@ -71,7 +84,7 @@ class _HomeNewState extends State<HomeNew> {
   void startTimer() {
     started = true;
 
-    timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       int localSecond = second + 1;
       int localMintues = minutes;
       if (localSecond == 15) {
@@ -90,7 +103,18 @@ class _HomeNewState extends State<HomeNew> {
         minutes = localMintues;
         digitSecond = (second >= 10) ? "$second" : "0$second";
         digitMin = (second >= 10) ? "$minutes" : "0$minutes";
+
+        indx = laps.length;
+        slight = false;
+        mild = false;
+        moderate = false;
+        strong = false;
+        intense = false;
       });
+      SharedPreferences secpref = await SharedPreferences.getInstance();
+      secpref.setString('digitSecond', digitSecond);
+      SharedPreferences minpref = await SharedPreferences.getInstance();
+      secpref.setString('digitMin', digitMin);
     });
   }
 
@@ -109,9 +133,7 @@ class _HomeNewState extends State<HomeNew> {
   //    print("This line will print after two seconds");
   //   });
   // }
-  bool slight = false;
-  bool mild = false;
-  bool strong = false;
+
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -180,13 +202,14 @@ class _HomeNewState extends State<HomeNew> {
         children: [
           Container(
             width: double.infinity,
-            height: 347,
+            height: 415,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(30),
                 color: const Color(0xff1E1E1E)),
             child: ListView.builder(
                 itemCount: laps.length,
                 itemBuilder: (context, index) {
+                  //indx = int.parse(laps[index]);
                   return Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: SizedBox(
@@ -200,9 +223,6 @@ class _HomeNewState extends State<HomeNew> {
 
                             laps.removeAt(index);
                           });
-                          SharedPreferences pref =
-                              await SharedPreferences.getInstance();
-                          pref.setInt('index', laps[index]);
                         },
                         child: Card(
                           semanticContainer: false,
@@ -222,41 +242,62 @@ class _HomeNewState extends State<HomeNew> {
                               ),
                               Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: slight
-                                      ? Column(
-                                          children: [
-                                            Text(
-                                              "${laps[index]}",
-                                              style: TextStyle(
-                                                  color: index.isOdd
-                                                      ? Colors.black
-                                                      : Colors.black),
-                                            ),
-                                            const Icon(
-                                              Icons.star,
-                                              color: Colors.amber,
-                                            ),
-                                          ],
-                                        )
-                                      : mild
-                                          ? Column(
-                                              children: [
-                                                Text(
-                                                  "${laps[index]}",
-                                                  style: TextStyle(
-                                                      color: index.isOdd
-                                                          ? Colors.black
-                                                          : Colors.black),
-                                                ),
-                                              ],
-                                            )
-                                          : Text(
-                                              "${laps[index]}",
-                                              style: TextStyle(
-                                                  color: index.isOdd
-                                                      ? Colors.black
-                                                      : Colors.black),
-                                            )),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        "${laps[index]}",
+                                        style: TextStyle(
+                                            color: index.isOdd
+                                                ? Colors.black
+                                                : Colors.black),
+                                      ),
+                                      const SizedBox(
+                                        height: 2.0,
+                                      ),
+                                      SmoothStarRating(
+                                          allowHalfRating: false,
+                                          onRated: (v) {},
+                                          starCount: 5,
+                                          rating: slight
+                                              ? 1
+                                              : mild
+                                                  ? 2
+                                                  : moderate
+                                                      ? 3
+                                                      : strong
+                                                          ? 4
+                                                          : intense
+                                                              ? 5
+                                                              : 0,
+                                          size: 15.0,
+                                          isReadOnly: true,
+                                          filledIconData: Icons.circle,
+                                          halfFilledIconData: Icons.star_half,
+                                          color: AppColors.fuchsiaPink,
+                                          borderColor: Colors.white,
+                                          spacing: 0.0),
+                                    ],
+                                  )
+                                  // : mild
+                                  //                               ? Column(
+                                  //                                   children: [
+                                  //                                     Text(
+                                  //                                       "${laps[index]}",
+                                  //                                       style: TextStyle(
+                                  //                                           color: index.isOdd
+                                  //                                               ? Colors.black
+                                  //                                               : Colors.black),
+                                  //                                     ),
+                                  //                                   ],
+                                  //                                 )
+                                  //                               : Text(
+                                  //                                   "${laps[index]}",
+                                  //                                   style: TextStyle(
+                                  //                                       color: index.isOdd
+                                  //                                           ? Colors.black
+                                  //                                           : Colors.black),
+                                  //                                 ),
+                                  ),
                             ],
                           ),
                         ),
@@ -274,7 +315,14 @@ class _HomeNewState extends State<HomeNew> {
               (!started)
                   ? InkWell(
                       onTap: () {
-                        (!started) ? startTimer() : stopTimer();
+                        setState(() {
+                          isloading = true;
+                        });
+                        Vibration.vibrate(duration: 100);
+                        startTimer();
+                        setState(() {
+                          isloading = false;
+                        });
                       },
                       child: Container(
                         width: 300,
@@ -283,22 +331,24 @@ class _HomeNewState extends State<HomeNew> {
                             color: AppColors.buttonColor,
                             borderRadius: BorderRadius.circular(12)),
                         child: Center(
-                            child: Text(
-                          "Start Tracker",
-                          style: GoogleFonts.lato(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.black),
-                        )),
+                          child: isloading
+                              ? CircularProgressIndicator()
+                              : Text(
+                                  "Start Tracker",
+                                  style: GoogleFonts.lato(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black),
+                                ),
+                        ),
                       ),
                     )
                   : InkWell(
                       onTap: () {
-                        addLaps();
+                        Vibration.vibrate(duration: 100);
                         Reset();
-                        showModalBottomSheet(
-                            context: context,
-                            builder: (context) => buildSheet());
+
+                        builddialog(context);
                       },
                       child: Container(
                         width: 300,
@@ -307,13 +357,14 @@ class _HomeNewState extends State<HomeNew> {
                             color: AppColors.textColor,
                             borderRadius: BorderRadius.circular(12)),
                         child: Center(
-                            child: Text(
-                          "Interval",
-                          style: GoogleFonts.lato(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.buttonColor),
-                        )),
+                          child: Text(
+                            "Interval",
+                            style: GoogleFonts.lato(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.buttonColor),
+                          ),
+                        ),
                       ),
                     ),
             ],
@@ -323,77 +374,153 @@ class _HomeNewState extends State<HomeNew> {
     );
   }
 
-  Widget buildSheet() {
-    return DraggableScrollableSheet(builder: (_, controller) {
-      return Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
-        child: ListView(
-          physics: NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          controller: controller,
-          children: [
-            const SizedBox(
-              height: 30,
+  Future builddialog(BuildContext context) {
+    return showGeneralDialog(
+      barrierLabel: "Label",
+      // barrierDismissible: true,
+      barrierColor: Colors.black.withOpacity(0.5),
+      transitionDuration: const Duration(milliseconds: 700),
+      context: context,
+      pageBuilder: (context, anim1, anim2) {
+        return Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 320,
+            alignment: Alignment.topCenter,
+            decoration: const BoxDecoration(
+              color: Colors.white,
             ),
-            const Center(
-                child: Text(
-              "Select Intensity",
-              style: TextStyle(fontSize: 20),
-            )),
-            const SizedBox(
-              height: 40,
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 20,
+                ),
+                const Center(
+                  child: Text(
+                    "Select Intensity",
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    if (indx == laps.length) {
+                      setState(() {
+                        slight = true;
+                        count = 1;
+                        addLaps();
+                        Reset();
+                      });
+                    }
+                  },
+                  child: const Text(
+                    "Slight",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+                const Divider(
+                  thickness: 0.5,
+                  height: 1.5,
+                  color: Colors.black,
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    if (indx == laps.length) {
+                      setState(() {
+                        mild = true;
+                        count = 2;
+                        addLaps();
+                      });
+                    }
+                  },
+                  child: const Text(
+                    "Mild",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+                const Divider(
+                  thickness: 0.5,
+                  height: 1.5,
+                  color: Colors.black,
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    if (indx == laps.length) {
+                      setState(() {
+                        moderate = true;
+                        count = 3;
+                        addLaps();
+                      });
+                    }
+                  },
+                  child: const Text(
+                    "Moderate",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+                const Divider(
+                  thickness: 0.5,
+                  height: 1.5,
+                  color: Colors.black,
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    if (indx == laps.length) {
+                      setState(() {
+                        strong = true;
+                        count = 4;
+                        addLaps();
+                      });
+                    }
+                  },
+                  child: const Text(
+                    "Strong",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+                const Divider(
+                  thickness: 0.5,
+                  height: 1.5,
+                  color: Colors.black,
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                    if (indx == laps.length) {
+                      setState(() {
+                        intense = true;
+                        count = 5;
+                        addLaps();
+                      });
+                    }
+                  },
+                  child: const Text(
+                    "Intense",
+                    style: TextStyle(fontSize: 15),
+                  ),
+                ),
+              ],
             ),
-            TextButton(
-                onPressed: () {
-
-                },
-                child: const Text(
-                  "Slight",
-                  style: TextStyle(fontSize: 20),
-                )),
-            const SizedBox(
-              height: 10,
-            ),
-            TextButton(
-                onPressed: () {},
-                child: const Text(
-                  "Mild",
-                  style: TextStyle(fontSize: 20),
-                )),
-            const SizedBox(
-              height: 10,
-            ),
-            TextButton(
-                onPressed: () {},
-                child: const Text(
-                  "Moderate",
-                  style: TextStyle(fontSize: 20),
-                )),
-            const SizedBox(
-              height: 10,
-            ),
-            TextButton(
-                onPressed: () {},
-                child: const Text(
-                  "Strong",
-                  style: TextStyle(fontSize: 20),
-                )),
-            const SizedBox(
-              height: 10,
-            ),
-            TextButton(
-                onPressed: () {
-
-                },
-                child: const Text(
-                  "Intense",
-                  style: TextStyle(fontSize: 20),
-                )),
-          ],
-        ),
-      );
-    });
+          ),
+        );
+      },
+      transitionBuilder: (context, anim1, anim2, child) {
+        return SlideTransition(
+          position: Tween(begin: const Offset(0, 1), end: const Offset(0, 0))
+              .animate(anim1),
+          child: child,
+        );
+      },
+    );
   }
 }
